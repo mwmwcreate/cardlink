@@ -11,7 +11,7 @@ const THEMES = {
   midnight: "theme-midnight",
 };
 
-export default function BusinessCard({ card, size = "normal", onClick }) {
+export default function BusinessCard({ card, size = "normal", onClick, memo = "", isEditableMemo = false, onSaveMemo }) {
   const themeClass = THEMES[card?.theme] || THEMES.purple;
   
   const cardRef = useRef(null);
@@ -19,6 +19,7 @@ export default function BusinessCard({ card, size = "normal", onClick }) {
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [localMemo, setLocalMemo] = useState(memo);
 
   const handleFlip = (e) => {
     e.stopPropagation();
@@ -178,28 +179,49 @@ export default function BusinessCard({ card, size = "normal", onClick }) {
             <h3 className="business-card__back-title">SOCIAL LINKS</h3>
             
             {(card?.twitter || card?.github || card?.instagram) ? (
-              <div className="business-card__socials-large">
+              <div className={isEditableMemo || memo ? "business-card__socials-horizontal" : "business-card__socials-large"}>
                 {card.twitter && (
                   <a href={`https://x.com/${card.twitter}`} target="_blank" rel="noopener noreferrer" className="business-card__social-link" onClick={e => e.stopPropagation()}>
                     <XIcon size={20} color="#f0f0f5" />
-                    <span>@{card.twitter}</span>
+                    {(!isEditableMemo && !memo) && <span>@{card.twitter}</span>}
                   </a>
                 )}
                 {card.github && (
                   <a href={`https://github.com/${card.github}`} target="_blank" rel="noopener noreferrer" className="business-card__social-link" onClick={e => e.stopPropagation()}>
                     <GitHubIcon size={20} color="#f0f0f5" />
-                    <span>{card.github}</span>
+                    {(!isEditableMemo && !memo) && <span>{card.github}</span>}
                   </a>
                 )}
                 {card.instagram && (
                   <a href={`https://instagram.com/${card.instagram}`} target="_blank" rel="noopener noreferrer" className="business-card__social-link" onClick={e => e.stopPropagation()}>
                     <InstagramIcon size={20} />
-                    <span>@{card.instagram}</span>
+                    {(!isEditableMemo && !memo) && <span>@{card.instagram}</span>}
                   </a>
                 )}
               </div>
             ) : (
               <p className="business-card__no-socials">SNS links not set.</p>
+            )}
+
+            {/* メモ機能 */}
+            {(isEditableMemo || memo) && (
+              <div className="business-card__memo-section">
+                <h3 className="business-card__back-title" style={{ marginTop: '16px', marginBottom: '8px' }}>PRIVATE MEMO</h3>
+                {isEditableMemo ? (
+                  <textarea
+                    className="business-card__memo-input"
+                    value={localMemo}
+                    onChange={(e) => setLocalMemo(e.target.value)}
+                    onBlur={() => {
+                      if (onSaveMemo) onSaveMemo(localMemo);
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="出会った場所や特徴などをメモ..."
+                  />
+                ) : (
+                  <p className="business-card__memo-text">{memo}</p>
+                )}
+              </div>
             )}
           </div>
 

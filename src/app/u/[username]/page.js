@@ -2,7 +2,7 @@
 import { useAuth } from "@/lib/auth";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getCard, getUserByUsername, saveCardToCollection, isCardSaved } from "@/lib/firestore";
+import { getCard, getUserByUsername, saveCardToCollection, isCardSaved, updateCardNote } from "@/lib/firestore";
 import BusinessCard from "@/components/BusinessCard";
 import { XIcon, GitHubIcon, InstagramIcon } from "@/components/SocialIcons";
 import "./profile.css";
@@ -15,6 +15,7 @@ export default function PublicProfilePage() {
   const [profileUser, setProfileUser] = useState(null);
   const [loadingCard, setLoadingCard] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [memo, setMemo] = useState("");
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
 
@@ -33,7 +34,15 @@ export default function PublicProfilePage() {
 
   useEffect(() => {
     if (user && profileUser && user.uid !== profileUser.id) {
-      isCardSaved(user.uid, profileUser.id).then(setSaved);
+      isCardSaved(user.uid, profileUser.id).then(savedData => {
+        if (savedData) {
+          setSaved(true);
+          setMemo(savedData.note || "");
+        } else {
+          setSaved(false);
+          setMemo("");
+        }
+      });
     }
   }, [user, profileUser]);
 
@@ -46,11 +55,30 @@ export default function PublicProfilePage() {
       setSaved(true);
       setToast({ msg: "名刺を保存しました！", type: "success" });
       setTimeout(() => setToast(null), 3000);
+      
+      // 保存直後にキャッシュをクリア
+      sessionStorage.removeItem(`cardlink_collection_${user.uid}`);
     } catch {
       setToast({ msg: "保存に失敗しました", type: "error" });
       setTimeout(() => setToast(null), 3000);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSaveMemo = async (newNote) => {
+    if (!user || !profileUser) return;
+    try {
+      await updateCardNote(user.uid, profileUser.id, newNote);
+      setMemo(newNote);
+      setToast({ msg: "メモを保存しました", type: "success" });
+      setTimeout(() => setToast(null), 3000);
+      
+      // コレクションのキャッシュをクリアして再取得させる
+      sessionStorage.removeItem(`cardlink_collection_${user.uid}`);
+    } catch {
+      setToast({ msg: "メモの保存に失敗しました", type: "error" });
+      setTimeout(() => setToast(null), 3000);
     }
   };
 
@@ -86,7 +114,15 @@ export default function PublicProfilePage() {
 
       <div className="container-narrow profile-page__content">
         <div className="profile-page__card animate-fade-in-up">
-          <BusinessCard card={card} size="large" />
+          <BusinessCard
+            card={card}
+            size="large"
+            memo={memo}
+            isEditableMemo={saved}
+            onSaveMemo={(newNote) => {
+              if (newNote !== memo) handleSaveMemo(newNote);
+            }}
+          />
         </div>
 
         {/* 詳細情報 */}

@@ -71,10 +71,17 @@ export async function getCollection(uid) {
   return results.filter(Boolean);
 }
 
-/** 特定の名刺がコレクションに保存されているか確認 */
+/** 特定の名刺がコレクションに保存されているか確認（保存されている場合はデータを返す） */
 export async function isCardSaved(uid, cardOwnerUid) {
   const ref = doc(db, "collections", uid, "savedCards", cardOwnerUid);
-  return (await getDoc(ref)).exists();
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data() : null;
+}
+
+/** コレクションに保存した名刺のメモを更新 */
+export async function updateCardNote(uid, cardOwnerUid, note) {
+  const ref = doc(db, "collections", uid, "savedCards", cardOwnerUid);
+  await updateDoc(ref, { note, updatedAt: serverTimestamp() });
 }
 
 /** ユーザー名を更新 */

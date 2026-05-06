@@ -2,7 +2,7 @@
 import { useAuth } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
-import { getCollection, removeFromCollection } from "@/lib/firestore";
+import { getCollection, removeFromCollection, updateCardNote } from "@/lib/firestore";
 import BusinessCard from "@/components/BusinessCard";
 import "./collection.css";
 
@@ -69,8 +69,37 @@ export default function CollectionPage() {
       setCards((prev) => prev.filter((c) => c.cardOwnerUid !== cardOwnerUid));
       setToast({ msg: "名刺を削除しました", type: "success" });
       setTimeout(() => setToast(null), 3000);
+      
+      // キャッシュも更新
+      const cacheKey = `cardlink_collection_${user.uid}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        sessionStorage.setItem(cacheKey, JSON.stringify(parsed.filter(c => c.cardOwnerUid !== cardOwnerUid)));
+      }
     } catch {
       setToast({ msg: "削除に失敗しました", type: "error" });
+      setTimeout(() => setToast(null), 3000);
+    }
+  };
+
+  const handleSaveMemo = async (cardOwnerUid, note) => {
+    if (!user) return;
+    try {
+      await updateCardNote(user.uid, cardOwnerUid, note);
+      setCards((prev) => prev.map((c) => c.cardOwnerUid === cardOwnerUid ? { ...c, note } : c));
+      setToast({ msg: "メモを保存しました", type: "success" });
+      setTimeout(() => setToast(null), 3000);
+      
+      // キャッシュも更新
+      const cacheKey = `cardlink_collection_${user.uid}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        sessionStorage.setItem(cacheKey, JSON.stringify(parsed.map((c) => c.cardOwnerUid === cardOwnerUid ? { ...c, note } : c)));
+      }
+    } catch {
+      setToast({ msg: "メモの保存に失敗しました", type: "error" });
       setTimeout(() => setToast(null), 3000);
     }
   };
@@ -154,6 +183,13 @@ export default function CollectionPage() {
                   card={item.card}
                   size="normal"
                   onClick={() => router.push(`/u/${item.ownerUsername}`)}
+                  memo={item.note || ""}
+                  isEditableMemo={true}
+                  onSaveMemo={(newNote) => {
+                    if (newNote !== item.note) {
+                      handleSaveMemo(item.cardOwnerUid, newNote);
+                    }
+                  }}
                 />
                 <div className="collection__item-meta">
                   <span className="collection__item-date">
