@@ -28,6 +28,7 @@ export default function CardEditPage() {
   const [username, setUsername] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
@@ -36,8 +37,36 @@ export default function CardEditPage() {
 
   useEffect(() => {
     if (user) {
+      // 1. キャッシュがあれば即時反映（Dashboardのキャッシュを利用）
+      const cacheKey = `cardlink_dashboard_${user.uid}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        try {
+          const { c, u } = JSON.parse(cached);
+          const defaultName = u?.discordName || "";
+          const defaultId = u?.discordId || "";
+          const defaultIcon = u?.iconURL || "";
+
+          setForm({
+            discordName: c?.discordName || defaultName,
+            discordId: c?.discordId || defaultId,
+            occupation: c?.occupation || "",
+            birthday: c?.birthday || c?.age || "",
+            message: c?.message || "",
+            theme: c?.theme || "purple",
+            iconURL: c?.iconURL || defaultIcon,
+            tags: c?.tags || [],
+            twitter: c?.twitter || "",
+            github: c?.github || "",
+            instagram: c?.instagram || "",
+          });
+          if (u) setUsername(u.username || "");
+          setIsFetching(false);
+        } catch (e) {}
+      }
+
+      // 2. 裏側で最新データを取得
       Promise.all([getCard(user.uid), getUser(user.uid)]).then(([c, u]) => {
-        // ユーザー情報（Discord連携など）から取得した初期値
         const defaultName = u?.discordName || "";
         const defaultId = u?.discordId || "";
         const defaultIcon = u?.iconURL || "";
@@ -57,6 +86,11 @@ export default function CardEditPage() {
         });
 
         if (u) setUsername(u.username || "");
+        
+        // キャッシュも最新化
+        sessionStorage.setItem(cacheKey, JSON.stringify({ c, u }));
+      }).finally(() => {
+        setIsFetching(false);
       });
     }
   }, [user]);
@@ -92,6 +126,18 @@ export default function CardEditPage() {
       await saveCard(user.uid, form);
       if (username) await updateUsername(user.uid, username);
       showToast("名刺を保存しました！");
+      
+      // 保存時にキャッシュも更新してDashboardですぐ反映されるようにする
+      const cacheKey = `cardlink_dashboard_${user.uid}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      let newU = {};
+      if (cached) {
+        try { newU = JSON.parse(cached).u; } catch (e) {}
+      }
+      // 最新のユーザー名(username)などを反映
+      if (username) newU.username = username;
+      sessionStorage.setItem(cacheKey, JSON.stringify({ c: form, u: newU }));
+      
     } catch (err) {
       showToast(err.message || "保存に失敗しました", "error");
     } finally {
@@ -99,7 +145,7 @@ export default function CardEditPage() {
     }
   };
 
-  if (loading || !user) {
+  if (loading || isFetching || !user) {
     return <div className="loading-screen"><div className="spinner" /></div>;
   }
 
