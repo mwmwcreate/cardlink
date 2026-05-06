@@ -34,7 +34,7 @@ export default function LandingPage() {
           <h1 className="landing__title">
             名刺交換を、
             <br />
-            <span className="landing__title-accent">もっとスマート</span>に。
+            <span className="landing__title-accent">もっとカジュアル</span>に。
           </h1>
           <p className="landing__subtitle">
             CardLinkで自分だけのデジタル名刺を作成。
