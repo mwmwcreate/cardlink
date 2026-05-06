@@ -51,7 +51,7 @@ export default function DashboardPage() {
         {/* ヘッダー */}
         <div className="dashboard__header animate-fade-in">
           <h1 className="dashboard__greeting">
-            WELCOME, {user.displayName || "GUEST"}
+            WELCOME, {userData?.discordName || user.displayName || "GUEST"}
           </h1>
           <p className="dashboard__sub">CardLink ダッシュボード</p>
         </div>
