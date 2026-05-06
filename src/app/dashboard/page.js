@@ -43,8 +43,8 @@ export default function DashboardPage() {
 
         <div className="dashboard__grid">
           {/* 自分の名刺プレビュー */}
-          <div className="dashboard__card-section glass-card animate-fade-in">
-            <h2 className="dashboard__section-title">あなたの名刺</h2>
+          <div className="dashboard__card-section animate-fade-in">
+            <h2 className="dashboard__section-title" style={{ alignSelf: "flex-start" }}>あなたの名刺</h2>
             {loadingCard ? (
               <div className="dashboard__card-loading"><div className="spinner" /></div>
             ) : card ? (
