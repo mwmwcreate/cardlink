@@ -1,0 +1,208 @@
+.landing {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero — Cinematic full-viewport */
+.landing__hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-3xl) var(--space-lg);
+}
+
+/* Subtle accent glow — not orbs */
+.landing__hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.landing__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+}
+
+.landing__orb--1 {
+  width: 600px;
+  height: 600px;
+  background: rgba(108, 113, 255, 0.06);
+  top: -20%;
+  left: -10%;
+}
+
+.landing__orb--2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(108, 113, 255, 0.04);
+  bottom: -10%;
+  right: -10%;
+}
+
+.landing__orb--3 {
+  display: none;
+}
+
+.landing__hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.landing__badge {
+  display: inline-block;
+  padding: 6px 20px;
+  border-radius: 32px;
+  background: rgba(108, 113, 255, 0.1);
+  border: 1px solid rgba(108, 113, 255, 0.25);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--space-xl);
+  animation: fadeIn 0.6s ease;
+}
+
+.landing__title {
+  font-size: var(--font-size-5xl);
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: var(--space-lg);
+  animation: fadeInUp 0.8s ease;
+}
+
+.landing__title-accent {
+  color: #6c71ff;
+}
+
+.landing__subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--space-2xl);
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.landing__actions {
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+/* カードプレビュー */
+.landing__preview {
+  margin-top: var(--space-3xl);
+  animation: fadeInUp 1s ease 0.6s both;
+}
+
+.landing__card-demo {
+  width: 340px;
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  animation: float 6s ease-in-out infinite;
+}
+
+.landing__card-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.landing__card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.landing__card-name {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.landing__card-id {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.landing__card-msg {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Features */
+.landing__features {
+  padding: var(--space-3xl) 0;
+}
+
+.landing__section-title {
+  text-align: center;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: var(--space-3xl);
+  color: var(--text-primary);
+}
+
+.landing__features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-lg);
+}
+
+.landing__feature-card {
+  padding: var(--space-xl);
+  text-align: center;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.landing__feature-card h3 {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: var(--space-sm);
+}
+
+.landing__feature-card p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.landing__feature-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+/* Footer */
+.landing__footer {
+  text-align: center;
+  padding: var(--space-2xl);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-top: 1px solid var(--border-color);
+}

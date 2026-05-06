@@ -1,0 +1,337 @@
+.business-card-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1.6 / 1;
+  perspective: 1000px;
+  cursor: default;
+}
+
+.business-card-wrapper[role="button"] {
+  cursor: pointer;
+}
+
+.business-card-wrapper[role="button"]:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.business-card-wrapper--small {
+  max-width: 280px;
+  font-size: 0.85em;
+}
+
+.business-card-wrapper--large {
+  max-width: 440px;
+}
+
+.business-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.business-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.business-card {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  background: var(--card-bg, linear-gradient(135deg, rgba(108,99,255,0.15), rgba(168,85,247,0.15)));
+  border: 1px solid var(--card-border, rgba(108,99,255,0.3));
+  overflow: hidden;
+  box-shadow: 0 4px 24px var(--card-glow, rgba(108,99,255,0.1));
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.business-card-front {
+  transform: rotateY(0deg);
+}
+
+.business-card-back {
+  transform: rotateY(180deg);
+}
+.business-card__glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  mix-blend-mode: overlay;
+  border-radius: var(--radius-xl);
+}
+
+
+
+/* 装飾円 */
+.business-card__decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.business-card__circle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--card-gradient, linear-gradient(135deg, #6c63ff, #a855f7));
+  opacity: 0.08;
+}
+
+.business-card__circle--1 {
+  width: 200px;
+  height: 200px;
+  top: -60px;
+  right: -40px;
+}
+
+.business-card__circle--2 {
+  width: 120px;
+  height: 120px;
+  bottom: -30px;
+  left: -20px;
+}
+
+.business-card__content {
+  position: relative;
+  z-index: 1;
+  padding: 16px 24px 24px 24px; /* 全体をさらに20px上に引き上げる */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateZ(40px);
+  pointer-events: none; /* ホバー計算の邪魔にならないように */
+}
+
+.business-card__content > * {
+  pointer-events: auto; /* 子要素はクリック可能に */
+}
+
+/* ヘッダー部（名前とアイコン） */
+.business-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* 画像に合わせて中央揃え */
+  gap: 12px;
+  width: 100%;
+}
+
+/* アイコン */
+.business-card__icon-wrapper {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--card-border, rgba(108,99,255,0.4));
+  flex-shrink: 0;
+  transform: translateZ(30px); /* 名前と同じ高さにしつつ3D効果を維持 */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.business-card__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.business-card__icon-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-gradient, linear-gradient(135deg, #6c63ff, #a855f7));
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* 情報 */
+.business-card__info {
+  flex: 1;
+  min-width: 0; /* flex子要素でテキスト省略を有効にするため */
+  display: flex;
+  flex-direction: column;
+}
+
+.business-card__name {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 2px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.business-card__discord-id {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* サブ情報 (OCCUPATION / BIRTHDAY) */
+.business-card__details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* カスタムタグ */
+.business-card__tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.business-card__custom-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--card-gradient, linear-gradient(135deg, #6c63ff, #a855f7));
+  color: white;
+  font-weight: 600;
+  opacity: 0.85;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* メッセージ */
+.business-card__message {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.business-card__message p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.4;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* SNSリンク */
+.business-card__socials {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.business-card__social-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ブランド */
+.business-card__brand {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.5;
+  transform: translateZ(20px);
+}
+
+/* 裏面 (BACK) 専用スタイル */
+.business-card__content--back {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.business-card__back-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+  transform: translateZ(40px);
+}
+
+.business-card__socials-large {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 200px;
+  transform: translateZ(30px);
+}
+
+.business-card__social-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition: all var(--transition-base);
+  text-decoration: none;
+}
+
+.business-card__social-link:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateX(4px);
+}
+
+.business-card__no-socials {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  font-style: italic;
+  transform: translateZ(20px);
+}
+
+/* フリップボタン */
+.business-card__flip-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  z-index: 20;
+  transform: translateZ(30px);
+}
+
+.business-card__flip-btn:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateZ(30px) scale(1.1);
+}
+

@@ -1,0 +1,113 @@
+.dashboard__header {
+  margin-bottom: var(--space-2xl);
+}
+
+.dashboard__greeting {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+}
+
+.dashboard__sub {
+  color: var(--text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.dashboard__card-section {
+  padding: var(--space-xl);
+}
+
+.dashboard__section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+}
+
+.dashboard__card-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.dashboard__card-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+}
+
+.dashboard__no-card {
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.dashboard__no-card p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.dashboard__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.dashboard__action-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  text-align: left;
+  transition: all var(--transition-base);
+  width: 100%;
+}
+
+.dashboard__action-card:hover {
+  transform: translateX(4px);
+  border-color: var(--card-border);
+  box-shadow: 0 4px 20px var(--card-glow);
+}
+
+.dashboard__action-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.dashboard__action-card h3 {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.dashboard__action-card p {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.dashboard__action-arrow {
+  margin-left: auto;
+  font-size: var(--font-size-xl);
+  color: var(--text-muted);
+  transition: transform var(--transition-base);
+}
+
+.dashboard__action-card:hover .dashboard__action-arrow {
+  transform: translateX(4px);
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard__greeting {
+    font-size: var(--font-size-2xl);
+  }
+}
