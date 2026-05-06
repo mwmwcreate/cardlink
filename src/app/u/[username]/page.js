@@ -2,7 +2,7 @@
 import { useAuth } from "@/lib/auth";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getCardByUsername, getUserByUsername, saveCardToCollection, isCardSaved } from "@/lib/firestore";
+import { getCard, getUserByUsername, saveCardToCollection, isCardSaved } from "@/lib/firestore";
 import BusinessCard from "@/components/BusinessCard";
 import { XIcon, GitHubIcon, InstagramIcon } from "@/components/SocialIcons";
 import "./profile.css";
@@ -20,9 +20,14 @@ export default function PublicProfilePage() {
 
   useEffect(() => {
     if (username) {
-      Promise.all([getCardByUsername(username), getUserByUsername(username)])
-        .then(([c, u]) => { setCard(c); setProfileUser(u); })
-        .finally(() => setLoadingCard(false));
+      getUserByUsername(username).then((u) => {
+        setProfileUser(u);
+        if (u) {
+          getCard(u.id).then(setCard).finally(() => setLoadingCard(false));
+        } else {
+          setLoadingCard(false);
+        }
+      });
     }
   }, [username]);
 

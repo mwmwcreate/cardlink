@@ -58,13 +58,16 @@ export async function getCollection(uid) {
   const ref = collection(db, "collections", uid, "savedCards");
   const q = query(ref, orderBy("savedAt", "desc"));
   const snap = await getDocs(q);
-  const results = [];
-  for (const d of snap.docs) {
+  
+  // N+1問題の解消：Promise.allで並列にカード情報を取得する
+  const fetchPromises = snap.docs.map(async (d) => {
     const data = d.data();
     const card = await getCard(data.cardOwnerUid);
-    if (card) results.push({ id: d.id, ...data, card });
-  }
-  return results;
+    return card ? { id: d.id, ...data, card } : null;
+  });
+  
+  const results = await Promise.all(fetchPromises);
+  return results.filter(Boolean);
 }
 
 /** 特定の名刺がコレクションに保存されているか確認 */
