@@ -63,7 +63,8 @@ export async function getCollection(uid) {
   const fetchPromises = snap.docs.map(async (d) => {
     const data = d.data();
     const card = await getCard(data.cardOwnerUid);
-    return card ? { id: d.id, ...data, card } : null;
+    const user = await getUser(data.cardOwnerUid);
+    return card && user ? { id: d.id, ...data, card, ownerUsername: user.username } : null;
   });
   
   const results = await Promise.all(fetchPromises);

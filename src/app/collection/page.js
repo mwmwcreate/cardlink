@@ -139,7 +139,7 @@ export default function CollectionPage() {
                 <BusinessCard
                   card={item.card}
                   size="normal"
-                  onClick={() => router.push(`/u/${item.card.id}`)}
+                  onClick={() => router.push(`/u/${item.ownerUsername}`)}
                 />
                 <div className="collection__item-meta">
                   <span className="collection__item-date">
@@ -147,7 +147,7 @@ export default function CollectionPage() {
                   </span>
                 </div>
                 <div className="collection__item-actions">
-                  <button className="btn btn-ghost btn-sm" onClick={() => router.push(`/u/${item.card.id}`)}>
+                  <button className="btn btn-ghost btn-sm" onClick={() => router.push(`/u/${item.ownerUsername}`)}>
                     詳細を見る
                   </button>
                   <button className="btn btn-danger btn-sm" onClick={() => handleRemove(item.cardOwnerUid)}>
