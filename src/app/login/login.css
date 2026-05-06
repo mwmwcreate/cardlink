@@ -67,25 +67,26 @@
   margin-bottom: var(--space-2xl);
 }
 
-.login-card__google-btn {
+.login-card__discord-btn {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-xl);
-  background: white;
-  color: #333;
+  gap: 12px;
+  padding: 16px;
+  background-color: #5865F2; /* Discord Blurple */
+  color: white;
+  border: none;
   border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
   font-weight: 600;
-  font-size: var(--font-size-base);
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-base), transform var(--transition-base);
 }
 
-.login-card__google-btn:hover {
+.login-card__discord-btn:hover {
+  background-color: #4752C4;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
 }
 
 .login-card__footer {

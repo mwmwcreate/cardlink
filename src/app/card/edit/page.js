@@ -36,22 +36,26 @@ export default function CardEditPage() {
 
   useEffect(() => {
     if (user) {
-      getCard(user.uid).then((c) => {
-        if (c) setForm({
-          discordName: c.discordName || "",
-          discordId: c.discordId || "",
-          occupation: c.occupation || "",
-          birthday: c.birthday || c.age || "",
-          message: c.message || "",
-          theme: c.theme || "purple",
-          iconURL: c.iconURL || "",
-          tags: c.tags || [],
-          twitter: c.twitter || "",
-          github: c.github || "",
-          instagram: c.instagram || "",
+      Promise.all([getCard(user.uid), getUser(user.uid)]).then(([c, u]) => {
+        // ユーザー情報（Discord連携など）から取得した初期値
+        const defaultName = u?.discordName || "";
+        const defaultId = u?.discordId || "";
+        const defaultIcon = u?.iconURL || "";
+
+        setForm({
+          discordName: c?.discordName || defaultName,
+          discordId: c?.discordId || defaultId,
+          occupation: c?.occupation || "",
+          birthday: c?.birthday || c?.age || "",
+          message: c?.message || "",
+          theme: c?.theme || "purple",
+          iconURL: c?.iconURL || defaultIcon,
+          tags: c?.tags || [],
+          twitter: c?.twitter || "",
+          github: c?.github || "",
+          instagram: c?.instagram || "",
         });
-      });
-      getUser(user.uid).then((u) => {
+
         if (u) setUsername(u.username || "");
       });
     }
