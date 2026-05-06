@@ -130,9 +130,12 @@ export default function ExchangePage() {
               </>
             ) : (
               <div className="exchange__no-card">
-                <p>まず名刺を作成してください</p>
+                <p style={{ fontWeight: "bold", marginBottom: "8px" }}>公開URL（ユーザー名）が未設定です</p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "24px" }}>
+                  QRコードを表示するには、名刺の編集画面で「ユーザー名（公開URL用）」を設定してください。
+                </p>
                 <button className="btn btn-primary" onClick={() => router.push("/card/edit")}>
-                  名刺を作成
+                  名刺を編集する
                 </button>
               </div>
             )}

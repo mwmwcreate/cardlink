@@ -60,7 +60,7 @@ export default function CardEditPage() {
             github: c?.github || "",
             instagram: c?.instagram || "",
           });
-          if (u) setUsername(u.username || "");
+          if (u) setUsername(u.username || defaultId || "");
           setIsFetching(false);
         } catch (e) {}
       }
@@ -85,7 +85,7 @@ export default function CardEditPage() {
           instagram: c?.instagram || "",
         });
 
-        if (u) setUsername(u.username || "");
+        if (u) setUsername(u.username || defaultId || "");
         
         // キャッシュも最新化
         sessionStorage.setItem(cacheKey, JSON.stringify({ c, u }));
@@ -260,10 +260,14 @@ export default function CardEditPage() {
                 )}
               </div>
               <div className="form-group">
-                <label className="form-label">ユーザー名（公開URL用）</label>
+                <label className="form-label">ユーザー名（公開URL用） *</label>
                 <input className="form-input" placeholder="例: yuta" value={username}
                   onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))} />
-                {username && <p className="edit__url-hint">公開URL: cardlink.vercel.app/u/{username}</p>}
+                {username ? (
+                  <p className="edit__url-hint">公開URL: cardlink.vercel.app/u/{username}</p>
+                ) : (
+                  <p className="edit__url-hint" style={{color: "var(--color-sunset)"}}>※QRコードを表示するために必須です</p>
+                )}
               </div>
             </div>
 
