@@ -29,8 +29,22 @@ export default function CollectionPage() {
 
   useEffect(() => {
     if (user) {
+      const cacheKey = `cardlink_collection_${user.uid}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        try {
+          // キャッシュがあれば即時表示
+          setCards(JSON.parse(cached));
+          setLoadingCards(false);
+        } catch (e) {}
+      }
+
+      // 裏側で最新データを取得して更新
       getCollection(user.uid)
-        .then(setCards)
+        .then((data) => {
+          setCards(data);
+          sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        })
         .finally(() => setLoadingCards(false));
     }
   }, [user]);

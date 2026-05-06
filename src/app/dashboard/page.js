@@ -20,8 +20,23 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (user) {
+      const cacheKey = `cardlink_dashboard_${user.uid}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        try {
+          const { c, u } = JSON.parse(cached);
+          setCard(c);
+          setUserData(u);
+          setLoadingCard(false);
+        } catch (e) {}
+      }
+
       Promise.all([getCard(user.uid), getUser(user.uid)])
-        .then(([c, u]) => { setCard(c); setUserData(u); })
+        .then(([c, u]) => {
+          setCard(c);
+          setUserData(u);
+          sessionStorage.setItem(cacheKey, JSON.stringify({ c, u }));
+        })
         .finally(() => setLoadingCard(false));
     }
   }, [user]);
