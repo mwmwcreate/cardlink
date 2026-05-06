@@ -109,14 +109,14 @@ export default function ExchangePage() {
           <div className="exchange__show glass-card animate-fade-in">
             {username ? (
               <>
-                <div className="exchange__qr-wrapper">
+                <div className="exchange__qr-wrapper" style={{ background: "#ffffff", padding: "16px", borderRadius: "16px", display: "inline-block" }}>
                   <QRCodeSVG
                     value={profileUrl}
                     size={240}
-                    bgColor="transparent"
-                    fgColor="#f0f0f5"
-                    level="M"
-                    includeMargin={false}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                    level="L"
+                    includeMargin={true}
                   />
                 </div>
                 <p className="exchange__qr-label">このQRコードを相手に見せてスキャンしてもらいましょう</p>
