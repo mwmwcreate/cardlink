@@ -53,14 +53,14 @@ export default function ExchangePage() {
         (decodedText) => {
           html5Qr.stop().catch(() => {});
           setScanning(false);
-          // URLからパスを抽出してリダイレクト
+          // URLからパスを抽出してリダイレクト（バージョン不整合エラーを防ぐためハードナビゲーションを使用）
           try {
             const url = new URL(decodedText);
-            router.push(url.pathname);
+            window.location.href = url.pathname;
           } catch {
             // URLでなければそのまま使用
             if (decodedText.startsWith("/")) {
-              router.push(decodedText);
+              window.location.href = decodedText;
             }
           }
         },
