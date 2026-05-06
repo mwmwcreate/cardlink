@@ -32,7 +32,7 @@ export default function DashboardPage() {
 
   return (
     <div className="page">
-      <div className="container">
+      <div className="container-narrow">
         {/* ヘッダー */}
         <div className="dashboard__header animate-fade-in">
           <h1 className="dashboard__greeting">
@@ -49,7 +49,7 @@ export default function DashboardPage() {
               <div className="dashboard__card-loading"><div className="spinner" /></div>
             ) : card ? (
               <div className="dashboard__card-preview">
-                <BusinessCard card={card} />
+                <BusinessCard card={card} size="large" />
                 <button className="btn btn-secondary" onClick={() => router.push("/card/edit")}>
                   EDIT CARD
                 </button>
